@@ -7,7 +7,16 @@
 |
 */
 
+//importancion normal
 import router from '@adonisjs/core/services/router'
+//importacion perezosa lazy routing usando funcion de flecha sin nombre
+const UsersController = () => import('#controllers/users_controller')
+const Users1SController = () => import('#controllers/users_1_s_controller')
+
+
+router.get('users', [UsersController, 'index'])
+
+
 
 router.get('/', async () => {
   return {
@@ -15,16 +24,18 @@ router.get('/', async () => {
   }
 })
 
-router.get('/name', async () => {
+router.get('/name',() => {
   return {
     name: 'pruebita',
   }
 })
 
-router.get('/telefono/:id', async ({ params }) => {
+router.get('/recetas/:categoria',  ({ params }) => {
+  console.log(params.categoria)
+  console.log(params['*'])
   return {
-    phone: params.phone,
-    name: params.name
+    categoria: params.categoria,
+    recipes: params['*']
   }
 })
 
@@ -40,4 +51,7 @@ router
     router.get('payments', () => {})
   })
   .prefix('/api')
+
+  //para crear las rutas de todos los metodos
+  router.resource('users1' , Users1SController)
 
